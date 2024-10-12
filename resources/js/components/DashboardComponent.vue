@@ -1,104 +1,103 @@
 <template>
   <div class="p-3">
-    <div class="main-container p-2 pt-3">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="dropdown mb-2">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-              Dropdown button
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-          </div>
+    <div class="row justify-content-between">
+      <div class="col-md-6">
+        <div class="main-container p-5 mb-4">
+          <BarChart :data="data" :options="options" />
         </div>
-      
-      <div class="col-md-6 ">
-        <div class="row justify-content-end">
-          <button class="custom-add-btn">Create Order</button>
+      </div>
+      <div class="col-md-6">
+        <div class="main-container p-5 mb-4" >
+          <LineChart :data="Linedata" :options="Lineoptions" />
+        </div>  
+      </div>
+      <div class="col-md-6">
+        <div class="main-container p-5 mb-4" >
+          <PieChart :data="Piedata" :options="Pieoptions" />
 
-        </div>
+        </div>  
       </div>
+      <div class="col-md-6">
+        <div class="main-container p-5 mb-4" >
+          <DoughnutChart :data="Doughnutdata" :options="Doughnutoptions" />
+        </div>  
       </div>
-    
-      <data-table
-      :data="tableData"
-      :columns="tableColumns"
-      :pagination="true"
-      :items-per-page="10"
-      :actions="actions"
-      @action="handleBtnAction"
-    />
-  <!-- Modal -->
-  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          {{ btnActionitem}}
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Understood</button>
-        </div>
-      </div>
-    </div>
-  </div>
     </div>
    
-
   </div>
 </template>
 
 <script>
-import DataTable from './partials/DataTableComponent.vue'; // Adjust path as needed
-import axios from 'axios';
+
+
+import {Chart as ChartJS,Title,Tooltip,Legend,BarElement,CategoryScale,LinearScale,PointElement, LineElement, ArcElement} from 'chart.js';
+import { Bar, Line, Pie, Doughnut } from 'vue-chartjs';
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, PointElement, LineElement, ArcElement);
 
 export default {
   components: {
-    DataTable
+    BarChart : Bar,
+    LineChart: Line,
+    PieChart : Pie,
+    DoughnutChart : Doughnut,
   },
   data() {
     return {
-      btnAction : '',
-      btnActionitem : [],
-      tableData: this.generateMockData(),
-      tableColumns: [
-        { key: 'id', label: 'ID' },
-        { key: 'name', label: 'Name' },
-        { key: 'email', label: 'Email' },
-        { key: 'email', label: 'Email' },
-      ],
-      actions: [
-        { name: 'edit', label: 'Edit' , class: 'edit-btn'},
-        { name: 'delete', label: 'Delete', class: 'delete-btn' }
-      ]
+      data: {
+        labels: ['January', 'February', 'March'],
+        datasets: [{ data: [40, 20, 12] }]
+      },
+      options: {
+        responsive: true
+      },
+
+      Linedata: {
+        labels: ['January', 'February', 'March', 'April', 'May'],
+        datasets: [{
+          label: 'Sales',
+          borderColor: '#f87979',
+          data: [40, 20, 30, 50, 60],
+        }]
+      },
+      Lineoptions: {
+        responsive: true,
+      },
+
+      Piedata: {
+        labels: ['Red', 'Blue', 'Yellow'],
+        datasets: [{
+          backgroundColor: ['#f87979', '#3498db', '#f1c40f'],
+          data: [30, 50, 20]
+        }]
+      },
+      Pieoptions: {
+        responsive: true,
+      },
+
+      Doughnutdata: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple'], // Labels for each section of the doughnut chart
+        datasets: [{
+          label: 'Colors Distribution', // A label for the dataset
+          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'], // Colors for each section
+          data: [30, 50, 20, 40, 10], // Values for each section
+        }]
+      },
+      Doughnutoptions: {
+        responsive: true, // Ensure the chart resizes with the container
+        plugins: {
+          legend: {
+            position: 'top', // Position of the legend
+          },
+          title: {
+            display: true,
+            text: 'Sample Doughnut Chart', // Title of the chart
+          },
+        },
+      },
+
     };
   },
   methods: {
-    generateMockData() {
-      const data = [];
-      for (let i = 1; i <= 100; i++) { // Generate 100 rows of data
-        data.push({
-          id: i,
-          name: `Name ${i}`,
-          email: `name${i}@example.com`,
-          email: `name${i}@example.com`,
-          status: i % 2 === 0 ? 'Active' : 'Inactive'
-        });
-      }
-      return data;
-    },
-    handleBtnAction({ action, item }) {
-      this.btnAction = action.name;
-      this.btnActionitem = item;
-      $('#staticBackdrop').modal('show');
-    },
 
   },
   mounted() {
@@ -108,7 +107,7 @@ export default {
 
 <style scoped>
   .main-container{
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    box-shadow: rgba(27, 31, 35, 0.04) 0px 1px 0px, rgba(255, 255, 255, 0.25) 0px 1px 0px inset;
     background-color: white;
     border-radius: 10px;
   }
