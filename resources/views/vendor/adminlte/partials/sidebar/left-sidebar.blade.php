@@ -1,4 +1,4 @@
-<aside class="main-sidebar {{ config('adminlte.classes_sidebar', 'sidebar-light-primary elevation-4') }}">
+<aside class="main-sidebar {{ config('adminlte.classes_sidebar', 'sidebar-light-primary elevation-4') }}" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px!important;">
 
     {{-- Sidebar brand logo --}}
     @if(config('adminlte.logo_img_xl'))
