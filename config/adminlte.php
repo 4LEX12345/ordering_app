@@ -237,12 +237,12 @@ return [
     */
 
     'right_sidebar' => false,
-    'right_sidebar_icon' => 'fas fa-cogs',
-    'right_sidebar_theme' => 'dark',
-    'right_sidebar_slide' => true,
-    'right_sidebar_push' => true,
-    'right_sidebar_scrollbar_theme' => 'os-theme-light',
-    'right_sidebar_scrollbar_auto_hide' => 'l',
+'right_sidebar_icon' => 'fas fa-cogs',
+'right_sidebar_theme' => 'dark',
+'right_sidebar_slide' => true,
+'right_sidebar_push' => true,
+'right_sidebar_scrollbar_theme' => 'os-theme-dark',
+'right_sidebar_scrollbar_auto_hide' => 'l',
 
     /*
     |--------------------------------------------------------------------------
@@ -304,17 +304,31 @@ return [
             'icon' => 'fas fa-fw fa-database',
             'submenu' => [
                 [
-                    'text' => 'Role',
-                    'icon' => 'far fa-fw fa-user',
-                    'url'  => 'role',
+                    'text' => 'Brands',
+                    'icon' => 'fas fa-certificate',
+                    'url'  => 'brand',
 
+                ],
+                [
+                    'text' => 'Flavors',
+                    'icon' => 'fas fa-apple-alt',
+                    'url'  => 'flavor',
+                ],
+                [
+                    'text' => 'Product Category',
+                    'icon' => 'fas fa-tags',
+                    'url'  => 'productcategory',
                 ]
-              
             ]
         ],
         [
+            'text' => 'Products',
+            'icon' => 'fas fa-box',
+            'url'  => 'product',
+        ],
+        [
             'text' => 'Order',
-            'icon' => 'far fa-fw fa-file',
+            'icon' => 'fas fa-receipt',
             'url'  => 'order',
         ],
         [
