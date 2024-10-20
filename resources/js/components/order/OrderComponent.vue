@@ -9,7 +9,7 @@
 
       <div class="main-container p-5 pt-3 " >
         <div class="row mb-2" v-show="!toggleCreate && !toggleEdit">
-          <div class="col-md-12">
+          <div class="col-md-12 text-right">
             <div class="">
               <button class="custom-add-btn rounded pl-3 pr-3 pt-2 pb-2" style="width: 10rem;" v-on:click="create">Create Order</button>
             </div>
@@ -23,8 +23,13 @@
         <div class="form" >
             <order-form-component 
                 v-show="toggleCreate"
+                v-if="isRendered" 
                 :toggleCreate="toggleCreate"
+                @cancelCreation="cancelCreation"
                 :customer-information="customerInformation"
+                :dateToday="dateToday"
+                :trackingNumber="trackingNumber"
+                :productsData="productsData"
             ></order-form-component>
         </div> 
 
@@ -51,10 +56,12 @@
         isEdit : false,
         toggleCreate : false,
         toggleEdit : false,
+        isRendered : false,
         errors : [],
 
-        //table for product category
-        tableData:[],
+        //collections
+        tableData:[], 
+        productsData : [],
    
         //variables
         customerInformation : {
@@ -67,6 +74,8 @@
             shipping_address : '',
             wholesale_account_number : '',
         },
+        dateToday : '',
+        trackingNumber : '',
 
       };
     },
@@ -83,18 +92,34 @@
             };
         },
         async getData(){
-
-        },
-        create(){
+         await axios.get('order/fetchdata').then(response => 
+          {
+            this.dateToday  = response.data.date_today;
+            this.trackingNumber = response.data.tracking_number;
+            this.productsData = response.data.products;
+            this.isRendered = true; //to make sure the fetchdata rendered first. this will solve the reactivity of the child-parent component
+          }).catch(error => {
+            toast.warning('Sorry Something Went Wrong!', {
+              position: toast.POSITION.TOP_RIGHT,
+              autoClose: 3000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+            });
+          });
+      },
+      create(){
         this.isEdit = false;
         this.init();
         this.toggleCreate = true;
-        },
+      },
       edit(row){
     
       },
       cancelCreation(val){
-     
+        this.toggleCreate  = false;
+        this.toggleEdit  = false;
       },
       async store(data, image){
        

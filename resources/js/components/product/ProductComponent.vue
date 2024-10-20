@@ -118,9 +118,8 @@
       },
       edit(row){
         this.toggleEdit = true;
-        console.log(row);
-        this.product = row;
         this.toggleEdit = true;
+        this.product = row;
       },
       cancelCreation(val){
         this.getData();
