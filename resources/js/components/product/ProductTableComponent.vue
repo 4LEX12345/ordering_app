@@ -8,7 +8,7 @@
                 <button class="btn" v-on:click="edit(row)"><i class="fas fa-edit text-primary"></i></button>
                 <button class="btn" v-on:click="destroy(row)"><i class="fas fa-trash text-danger"></i></button>
               </template>
-            </v-client-table>
+        </v-client-table>
     </div>
 </template>
 
