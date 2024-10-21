@@ -65,8 +65,11 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/', [App\Http\Controllers\OrderHeaderController::class, 'index']);
         Route::get('fetchdata', [App\Http\Controllers\OrderHeaderController::class, 'fetchData']);
         Route::post('store', [App\Http\Controllers\OrderHeaderController::class, 'store']);
-        Route::post('update', [App\Http\Controllers\OrderHeaderController::class, 'update']);
+        Route::get('/edit/{id}', [App\Http\Controllers\OrderHeaderController::class, 'edit']);
+        Route::put('update/{id}', [App\Http\Controllers\OrderHeaderController::class, 'update']);
         Route::get('destroy/{id}', [App\Http\Controllers\OrderHeaderController::class, 'destroy']);
+        Route::get('generateinvoice/{id}', [App\Http\Controllers\OrderHeaderController::class, 'generateInvoice']);
+        Route::get('showgenerate', [App\Http\Controllers\OrderHeaderController::class, 'showGenerate']);
     });
   
 

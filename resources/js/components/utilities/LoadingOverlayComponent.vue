@@ -1,4 +1,4 @@
-<!-- src/components/LoadingOverlay.vue -->
+src/components/LoadingOverlay.vue
 <template>
     <div v-if="isVisible" class="loading-overlay">
         <div class="spinner-grow text-primary" role="status">

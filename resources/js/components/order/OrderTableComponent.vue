@@ -5,7 +5,7 @@
                 <span>{{ formatRoles(row) }}</span>
               </template>
               <template v-slot:actions="{ row }">
-                <button class="btn" v-on:click="edit(row)"><i class="fas fa-edit text-primary"></i></button>
+                <button class="btn" v-on:click="edit(row)"><i class="fas fa-eye text-primary"></i></button>
                 <button class="btn" v-on:click="destroy(row)"><i class="fas fa-trash text-danger"></i></button>
               </template>
             </v-client-table>
@@ -22,7 +22,8 @@
         },  
         data(){
             return {
-                columns: ['id','order_date','tracking_number','payment_method','payment_status','delivery_status','actions'],
+                columns: ['id','order_date','tracking_number','business_name','contact_person','contact_person_contact_number', 'contact_person_email', 'billing_address',
+,'shipping_address','actions'],
                 options: {
                     pagination : {
                     virtual : true,

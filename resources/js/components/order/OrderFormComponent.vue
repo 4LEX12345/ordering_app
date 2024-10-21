@@ -89,29 +89,42 @@
                                 <div class="form-group">
                                     <label for="">Tracking Number</label>
                                     <input type="text" class="form-control" readonly v-model="orderInfo.tracking_number">
+                                    <span v-if="errors.tracking_number" class="error-message" style="color: red;">{{ errors.tracking_number[0]}}</span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="order_date">Order Date</label>
                                     <input type="date" class="form-control" name="order_date"  id="order_date" v-model="orderInfo.order_date">
+                                    <span v-if="errors.order_date" class="error-message" style="color: red;">{{ errors.order_date[0]}}</span>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="payment_method">Payment Method</label>
-                                    <select name="payment_method" id="payment_method" class="form-control">
+                                    <select name="payment_method" id="payment_method" class="form-control" v-model="orderInfo.payment_method">
                                         <option value="">Select Payment Method</option>
                                         <option value="1">Credit Card</option>
                                         <option value="2">Debit Card</option>
                                         <option value="3">Bank Transfer</option>
                                         <option value="4">Cash on Delivery</option>
                                     </select>
+                                    <span v-if="errors.payment_method" class="error-message" style="color: red;">{{ errors.payment_method[0]}}</span>
+                                </div>
+                            </div> 
+                            <div class="col-md-12" >
+                                <div class="d-md-flex">
+                                    <button class="btn btn-secondary" style="font-size: 10px;" v-on:click="togglePayment">Add Payment</button>
+                                    <div class="ml-2" v-if="inputPayment">
+                                        <div class="d-md-flex" v-show="inputPayment">
+                                        <input type="text" class="form-control" v-model="payment" style="font-size: 10px;">
+                                        <button class="btn btn-primary ml-2" style="font-size: 8px;" v-on:click="addPayment">+  </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>  
                     </div>
-                    
                     <div class="order-overview mt-2">
                         <p class="title-header">Order Summary</p>
                         <div class="row justify-content-between">
@@ -119,24 +132,24 @@
                                 <p>Subtotal</p>
                             </div>
                             <div class="col-6">
-                                <p class="text-right">{{ subTotal }}</p>
+                                <p class="text-right">{{ formatNumber(subTotal) }}</p>
                             </div>
                         </div>
-                        <!-- <div class="row justify-content-between">
+                        <div class="row justify-content-between" v-show="hasPayment">
                             <div class="col-6">
-                                <p>VAT(12%)</p>
+                                <p>Payment</p>
                             </div>
                             <div class="col-6">
-                                <p class="text-right">100.00</p>
+                                <p class="text-right">{{ formatNumber(orderInfo.payment) }}</p>
                             </div>
-                        </div> -->
+                        </div>
                         <div class="w-100 border-bottom mt-2 mb-2"></div>
                         <div class="row justify-content-between">
                             <div class="col-6">
                                 <p class="font-weight-bold">TOTAL</p>
                             </div>
                             <div class="col-6">
-                                <p class="text-right font-weight-bold">{{ subTotal }}</p>
+                                <p class="text-right font-weight-bold">{{ grandTotal }}</p>
                             </div>
                         </div>
                     </div>
@@ -158,11 +171,11 @@
                         <button class="btn btn-danger" v-on:click="closeModal"><i class="fas fa-times-circle"></i></button>
                     </div>
                     <div class="modal-body" >
-                        <div class="form-group m-auto pb-3" style="width: 99%;">
+                        <div class="form-group m-auto pb-3 " style="width: 99%;">
                             <label for="search">Search Product</label>
                             <input type="text" placeholder="Seach product name here...." class="form-control" v-model="searchItem" v-on:change="searchProduct">
                         </div>
-                        <div style="height: 500px; overflow-y: scroll; overflow-x: hidden; width: 100%;" class="p-2">
+                        <div style="height: 500px; overflow-y: scroll; overflow-x: hidden; width: 100%;" class="p-2 ">
                             <div class="row">
                                 <div class="col-md-4" v-for="item in productFilter ">
                                     <div class="card">
@@ -212,10 +225,9 @@
     import { toast } from 'vue3-toastify';
     import Swal from 'sweetalert2';
     import LoadingOverlayComponent from '../utilities/LoadingOverlayComponent.vue';
-    import Select2 from 'vue3-select2-component';
 
     export default {
-        components:{LoadingOverlayComponent, Select2},
+        components:{LoadingOverlayComponent},
         props : {
             errors : {
                 type : Object,
@@ -256,9 +268,15 @@
                     order_date : '',
                     tracking_number : '',
                     payment_method : '',
+                    payment : 0,
                 },
-                customerInformationForm : false,
+                customerInformationForm : true,
+                searchItem : '',
+                productList : [],
+                payment : 0,
+                inputPayment : false,
 
+                //table
                 items : [],
                 columns: [ 'name','input_quantity','unit_price','total','actions'],
                 options: {
@@ -283,9 +301,7 @@
                     },
                     filterable:  false, //filter change when needed
                 },
-                searchItem : '',
-                productList : [],
-              
+           
             }
         },
         mounted(){
@@ -298,7 +314,6 @@
             if (this.trackingNumber) {
                 this.orderInfo.tracking_number = this.trackingNumber;
             }
-
         },
         methods : {
             async toogleCancel(){
@@ -329,7 +344,7 @@
                 }, 1000);
             },
             store(){
-                this.$emit('store',this.customerInformation, this.image);
+                this.$emit('store',this.customerInformation, this.business_tax_file, this.items, this.orderInfo, this.subTotal);
             },
             update(){
                 this.$emit('update',this.customerInformation, this.image);
@@ -360,7 +375,6 @@
                             draggable: true,
                         });
                     }, 500);
-                   
                 } 
                 else{
                     toast.warning('PLEASE INPUT QUANTITY / UNIT PRICE', {
@@ -372,7 +386,6 @@
                         draggable: true,
                     });
                 }
-              
             },
             removeItem(row){
                 row.input_quantity = 0;
@@ -397,10 +410,6 @@
                     });
                     this.loading = false;
                 }, 500);
-
-            
-
-
             },
             addProduct(){
                 this.productList = this.productsData;
@@ -408,8 +417,20 @@
             },
             closeModal(){
                 $('#product-modal').modal('hide');
+            },
+            addPayment(){
+                this.orderInfo.payment = this.payment;
+            },
+            formatNumber(value) {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency', // or 'decimal'
+                    currency: 'PHP', // Change this if needed, e.g., 'EUR', 'GBP'
+                    minimumFractionDigits: 2, // Ensures two decimal places
+                }).format(value);
+            },
+            togglePayment(){
+                this.inputPayment = true;
             }
-         
         },
         computed : {
             isInputComplete(){
@@ -436,7 +457,24 @@
                 }
             },
             subTotal(){
-                return this.items.reduce((total, item) => total + (Number(item.unit_price) * Number(item.input_quantity)), 0).toFixed(2);
+                const total = this.items.reduce((total, item) => {
+                const unitPrice = Number(item.unit_price) || 0; // Default to 0 if NaN
+                const inputQuantity = Number(item.input_quantity) || 0; // Default to 0 if NaN
+                
+                return total + (unitPrice * inputQuantity);
+                }, 0);
+
+                const formattedTotal = this.items.length > 0 ? total: 0;
+                return formattedTotal;
+            },
+            hasPayment(){
+                return this.orderInfo.payment != 0  ? true : false;
+            },
+            grandTotal(){
+                let subTotal = this.items.length > 0 ?  this.items.reduce((total, item) => total + (Number(item.unit_price) * Number(item.input_quantity)), 0).toFixed(2) : 0;
+                let payment  = this.orderInfo.payment;
+                let grandTotal = Number(subTotal) - Number(payment); 
+                return this.formatNumber(grandTotal);
             }
         }
     }
@@ -450,6 +488,10 @@
     font-size: 14px;
     padding-bottom: 10px;
     border-bottom:  1px solid #dee2e6 ;
+}
+
+.shadow{
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px;
 }
 
 </style>
