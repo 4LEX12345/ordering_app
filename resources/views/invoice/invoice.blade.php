@@ -136,10 +136,10 @@
                             <td>{{ $item->unit_price }}</td>
                             <td>{{ number_format($total, 2, '.',',') }}</td>
                         </tr>
+                        @endforeach
                         <tr class="item">
                             <td colspan="5" style="text-align: center;">*NOTHING FOLLOWS*</td>
                         </tr>
-                        @endforeach
                         <tr class="item">
                             <td colspan="3" style="border: none;"></td>
                             <td style="font-weight: 900;">Subtotal  :</td>
