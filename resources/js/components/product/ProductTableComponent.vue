@@ -22,7 +22,7 @@
         },  
         data(){
             return {
-                columns: ['id', 'name','description','brand','product_category', 'flavor','actions'],
+                columns: ['id', 'name', 'unit_price','description','brand','product_category', 'flavor','actions'],
                 options: {
                     pagination : {
                     virtual : true,

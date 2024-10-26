@@ -45,6 +45,7 @@
                 @update="update"
                 @store="store"
                 @generateInvoice="generateInvoice"
+                @generateFinalInvoice="generateFinalInvoice"
             ></order-view-component>
 
         </div> 
@@ -112,6 +113,15 @@
                 shipping_address : '',
             };
       },
+      create(){
+        this.isEdit = false;
+        this.init();
+        this.toggleCreate = true;
+      },
+      cancelCreation(val){
+        this.toggleCreate  = false;
+        this.toggleEdit  = false;
+      },
       async getData(){
          await axios.get('order/fetchdata').then(response => 
           {
@@ -130,11 +140,6 @@
               draggable: true,
             });
           });
-      },
-      create(){
-        this.isEdit = false;
-        this.init();
-        this.toggleCreate = true;
       },
       async edit(row){
         this.loading = true;
@@ -155,10 +160,6 @@
         }).finally(() => { this.loading = false});
    
        
-      },
-      cancelCreation(val){
-        this.toggleCreate  = false;
-        this.toggleEdit  = false;
       },
       async store(data, image, items, orderInfo, subTotal){
         const formData = new FormData();
@@ -192,8 +193,12 @@
               draggable: true,
             });
             
-            if(response.data.message == 'success'){
+            if(response.data.is_paid){
+              this.generateFinalInvoice(response.data.order_id);
+            }
+            else{
               this.generateInvoice(response.data.order_id);
+
             }
     
         }).catch(error => {
@@ -204,7 +209,25 @@
       async generateInvoice(id){
         await axios.get('order/generateinvoice/' + id).then(response => {
             if(response.data.message == 'success'){
-              window.open('order/showgenerate', '_blank');
+              window.open('order/showinvoice', '_blank');
+            }
+            this.getData();
+            this.cancelCreation(false);
+        }).catch(errors => {
+          toast.warning('Sorry Something Went Wrong On Generating Invoice!', {
+              position: toast.POSITION.TOP_RIGHT,
+              autoClose: 3000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+            });
+        });
+      },
+      async generateFinalInvoice(id){
+        await axios.get('order/generatefinalinvoice/' + id).then(response => {
+            if(response.data.message == 'success'){
+              window.open('order/showfinalinvoice', '_blank');
             }
             this.getData();
             this.cancelCreation(false);

@@ -27,6 +27,7 @@ class ProductRequest extends FormRequest
             'brand_id' => ['required', 'numeric'],
             'product_category_id' => ['required', 'numeric'],
             'flavor_id' => ['required', 'numeric'],
+            'unit_price' => ['required', 'numeric'],
             // 'image' => ['required','image','mimes:jpeg,png,jpg,gif','max:2048'],
         ];
     }
@@ -41,6 +42,7 @@ class ProductRequest extends FormRequest
             'product_category_id.numeric' => 'The product category ID must be a number.',
             'flavor_id.required' => 'You must select a flavor.',
             'flavor_id.numeric' => 'The flavor ID must be a number.',
+            'unit_price.numeric' => 'The Unit Price must be a number.',
             // 'image.required' => 'An image is required for the product.',
             // 'image.image' => 'The uploaded file must be an image.',
             // 'image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif.',

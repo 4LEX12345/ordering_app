@@ -51,7 +51,7 @@
             <div class="col-6"> 
              
                 <div class="form-group">
-                    <label for="product_category_name">Product Category Name</label>
+                    <label for="product_category_name">Product Name</label>
                     <input v-model="getProduct.name" type="text"  id="first_name" :class="{'form-control': true, 'border border-danger': errors.name}">
                     <span v-if="errors.name" class="error-message">{{ errors.name[0]}}</span>
                 </div>
@@ -79,7 +79,11 @@
                         <option v-for="item in productCategories" :value="item.id">{{ item.name}}</option>
                     </select>
                     <span v-if="errors.product_category_id" class="error-message">{{ errors.product_category_id[0]}}</span>
-
+                </div>
+                <div class="form-group">
+                    <label for="unit_price">Unit Price</label>
+                    <input v-model="getProduct.unit_price" type="text"  id="unit_price" :class="{'form-control': true, 'border border-danger': errors.unit_price}" placeholder="0.00">
+                    <span v-if="errors.unit_price" class="error-message">{{ errors.unit_price[0]}}</span>
                 </div>
                 <div class="form-group">
                     <label for="description">Description <span style="font-style: italic; color:grey; font-size: 10px;">Please separate the desrciption by comma (,)</span></label>

@@ -1,6 +1,7 @@
 @extends('adminlte::page')
 @section('content')
     <div id="app">
+        <!-- <h2 class="p-5">Welcome!</h2> -->
         <dashboard-component></dashboard-component>
     </div>
 @stop

@@ -123,7 +123,7 @@
             <div class="col-12 text-right">
             <button class="btn btn-warning mr-2" v-on:click="toogleCancel()">Cancel</button>
             <button class="btn btn-primary" v-on:click="generateInvoice" v-if="grandTotal != 0">Generate Invoice</button>
-            <button class="btn btn-primary" v-on:click="generateInvoice" v-else>Generate Final Invoice</button>
+            <button class="btn btn-primary" v-on:click="generateFinalInvoice" v-else>Generate Final Invoice</button>
         </div>
         </div>
         <div class="modal fade" id="add-payment-modal"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -317,6 +317,9 @@
             },
             generateInvoice(){
                 this.$emit('generateInvoice', this.orderDataInformation.id);
+            },
+            generateFinalInvoice(){
+                this.$emit('generateFinalInvoice', this.orderDataInformation.id);
             },
             formatNumber(value) {
                 return new Intl.NumberFormat('en-US', {
