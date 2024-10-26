@@ -178,8 +178,8 @@
                         <div style="height: 500px; overflow-y: scroll; overflow-x: hidden; width: 100%;" class="p-2 ">
                             <div class="row">
                                 <div class="col-md-4" v-for="item in productFilter ">
-                                    <div class="card">
-                                        <img :src="'/storage/'+ item.image" alt="test" width="150" height="150" class="m-auto">
+                                    <div class="card m-3">
+                                        <img :src="'/storage/'+ item.image" alt="test" width="150" height="150" class="m-auto p-3">
                                         <div class="card-body">
                                             <span style="font-size: 15px; font-weight: 400;">Name : {{ item.name}}  </span>
                                             <br>
@@ -189,15 +189,16 @@
                                             <br>
                                             <span>Category : <span>{{ item.product_category_name}} </span> </span>
                                             <br>
+                                            <div class="form-group mt-3">
+                                                <label for="">Price</label>
+                                                <input type="text" v-model="item.unit_price" class="form-control" readonly>
+                                            </div>
                                             <div class="mt-3">
                                                 <div class="form-group">
                                                 <label for="">Quantity</label>
                                                 <input type="text" v-model="item.input_quantity" class="form-control">
                                             </div>
-                                            <div class="form-group">
-                                                <label for="">Price</label>
-                                                <input type="text" v-model="item.unit_price" class="form-control">
-                                            </div>
+                                         
                                             </div>
                                         </div>
                                         <div class="mb-3 p-2">
@@ -354,7 +355,7 @@
                 this.customerInformation.business_tax_id =   this.business_tax_file.name;
             },
             addItem(item){
-                if(item.input_quantity != 0 && item.unit_price != 0){
+                if(item.input_quantity != 0){
                     this.loading  = true;
                     setTimeout(() => {
                         const getItem = {...item};
@@ -389,8 +390,6 @@
             },
             removeItem(row){
                 row.input_quantity = 0;
-                row.unit_price = 0;
-
                 this.loading  = true;
                 setTimeout(() => {
                     const getItem = {...row};
@@ -450,7 +449,7 @@
             },
              productFilter(){
                 if(this.searchItem != ''){
-                    return this.productList.filter(item => item.name.toLowerCase().includes(this.searchItem.toLowerCase()) );
+                    return this.productList.filter(item => item.name.toLowerCase().includes(this.searchItem.toLowerCase()));
                 }
                 else{
                     return this.productList;

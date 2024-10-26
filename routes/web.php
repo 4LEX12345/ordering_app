@@ -69,7 +69,10 @@ Route::group(['middleware' => 'auth'], function(){
         Route::put('update/{id}', [App\Http\Controllers\OrderHeaderController::class, 'update']);
         Route::get('destroy/{id}', [App\Http\Controllers\OrderHeaderController::class, 'destroy']);
         Route::get('generateinvoice/{id}', [App\Http\Controllers\OrderHeaderController::class, 'generateInvoice']);
-        Route::get('showgenerate', [App\Http\Controllers\OrderHeaderController::class, 'showGenerate']);
+        Route::get('generatefinalinvoice/{id}', [App\Http\Controllers\OrderHeaderController::class, 'generateFinalInvoice']);
+        
+        Route::get('showinvoice', [App\Http\Controllers\OrderHeaderController::class, 'showInvoice']);
+        Route::get('showfinalinvoice', [App\Http\Controllers\OrderHeaderController::class, 'showFinalInvoice']);
     });
   
 

@@ -136,6 +136,7 @@
           formData.append('brand_id', data.brand_id === undefined ? '' :  data.brand_id);
           formData.append('product_category_id', data.product_category_id === undefined ? '' :  data.product_category_id);
           formData.append('flavor_id', data.flavor_id  === undefined ? '' :  data.flavor_id);
+          formData.append('unit_price', data.unit_price  === undefined ? '' :  data.unit_price);
 
           this.loading = true;
           await axios.post('product/store', formData,{
@@ -168,6 +169,7 @@
         formData.append('brand_id', data.brand_id === undefined ? '' :  data.brand_id);
         formData.append('product_category_id', data.product_category_id === undefined ? '' :  data.product_category_id);
         formData.append('flavor_id', data.flavor_id  === undefined ? '' :  data.flavor_id);
+        formData.append('unit_price', data.unit_price  === undefined ? '' :  data.unit_price);
         formData.append('_method', 'POST');
        
         this.loading = true;

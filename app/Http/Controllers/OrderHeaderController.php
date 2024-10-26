@@ -30,7 +30,6 @@ class OrderHeaderController extends Controller
             $item->brand_name = $item->brand->name;
             $item->product_category_name = $item->productCategory->name;
             $item->input_quantity = 0;
-            $item->unit_price = 0;
             $item->total = 0;
             $item->from_db = false;
             return $item;
@@ -54,6 +53,7 @@ class OrderHeaderController extends Controller
             $validated = $request->validated();
             $system_param  = SystemParameter::first();
             $date_today = Carbon::today()->format('Y-m-d');
+            $total_payment = 0;
             $path = null;
             if($request->file('image')){
                 $path = $request->file('image')->store('images', 'public'); //store the image on public folder
@@ -89,6 +89,10 @@ class OrderHeaderController extends Controller
                         $payment->payment_date = $date_today;
                         $payment->payment_method =  $validated['payment_method'];
                         $payment->save();
+
+                        if($payment){
+                            $total_payment += $payment->amount;
+                        }
                     }
                     //store the items selected
                     foreach($request->items as $item){
@@ -103,9 +107,16 @@ class OrderHeaderController extends Controller
                     //update the system parameter e.g invoice_num and tracking_num
                     $this->updateSystemParam(); //increment the values
                 }
+
+
+                //update the payment status if fully paid  
+                $is_paid = $total_payment == $order_header->total_amount ;
+                $update_order_status = OrderHeader::find($order_header->id);
+                $update_order_status->payment_status =  $is_paid ? 'paid' : 'pending';
+                $update_order_status->save();
             }
             DB::commit();
-            return response()->json(['message' => 'success', 'order_id' => $order_header->id], 200);
+            return response()->json(['message' => 'success', 'order_id' => $order_header->id,'is_paid' => $is_paid], 200);
         }
         catch(\Exception $e){
             DB::rollback();
@@ -139,7 +150,7 @@ class OrderHeaderController extends Controller
         ->get()
         ->map(function($item){
             $item->product_name = $item->product->name;
-            $item->total= $item->quantity * $item->unit_price;
+            $item->total= $item->quantity * $item->unit_price;  
             return $item;
         });
 
@@ -150,9 +161,18 @@ class OrderHeaderController extends Controller
         session()->put('order', $order);
         return response()->json(['message'=> 'success'], 200);
     }
-    public function showGenerate(){
+    public function generateFinalInvoice($id){
+        $order = OrderHeader::findOrFail($id);
+        session()->put('order', $order);
+        return response()->json(['message'=> 'success'], 200);
+    }
+    public function showInvoice(){
         $order = session()->get('order');
         return view('invoice.invoice', compact('order'));
+    }
+    public function showFinalInvoice(){
+        $order = session()->get('order');
+        return view('invoice.finalinvoice', compact('order'));
     }
     function updateSystemParam(){
         $system_param  = SystemParameter::first();

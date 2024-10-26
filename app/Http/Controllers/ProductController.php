@@ -45,6 +45,7 @@ class ProductController extends Controller
         $store_product->product_category_id = $validated['product_category_id'];
         $store_product->flavor_id = $validated['flavor_id'];
         $store_product->image = $path;
+        $store_product->unit_price = $validated['unit_price'];
         $store_product->save();
         return response()->json(['message' => 'Saved Succesfully!'], 200);
     }
@@ -68,6 +69,7 @@ class ProductController extends Controller
         $update_product->brand_id = $validated['brand_id'];
         $update_product->product_category_id = $validated['product_category_id'];
         $update_product->flavor_id = $validated['flavor_id'];
+        $update_product->unit_price = $validated['unit_price'];
         $update_product->save();
 
         return response()->json(['message' => 'Updated Succesfully!'], 200);
