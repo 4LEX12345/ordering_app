@@ -10,8 +10,8 @@
       <div class="main-container p-5 pt-3 ">
         <div class="row mb-2">
         <div class="col-md-12">
-          <div class="">
-            <button class="custom-add-btn rounded pl-3 pr-3 pt-2 pb-2" v-on:click="create"><i class="fas fa-solid fa-plus"></i></button>
+          <div class="m-auto text-right">
+            <button class="button create-btn create-btn:hover" v-on:click="create">Create New <i class="fas fa-solid fa-plus"></i></button>
           </div>
         </div>
         </div>
@@ -22,8 +22,8 @@
                 <span>{{ formatRoles(row) }}</span>
               </template>
               <template v-slot:actions="{ row }">
-                <button class="btn" v-on:click="edit(row)"><i class="fas fa-edit text-primary"></i></button>
-                <button class="btn" v-on:click="destroy(row)"><i class="fas fa-trash text-danger"></i></button>
+                <button class="button edit-btn"  v-on:click="edit(row)"> <i class="fas fa-edit text-primary text-light"></i> Edit</button>
+                <button class="button delete-btn" v-on:click="destroy(row)"> <i class="fas fa-trash text-light"></i> Delete</button>
               </template>
             </v-client-table>
         </div> 
@@ -42,9 +42,9 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" v-on:click="store" v-if="!isEdit">Create</button>
-                        <button type="button" class="btn btn-primary"  v-on:click="update"  v-else>Update</button>
+                        <button type="button" class="button close-btn" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="button save-btn" v-on:click="store" v-if="!isEdit">Create</button>
+                        <button type="button" class="button update-btn"  v-on:click="update"  v-else>Update</button>
                     </div>
                 </div>
             </div>

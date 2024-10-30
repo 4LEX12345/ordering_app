@@ -318,7 +318,17 @@ return [
                     'text' => 'Product Category',
                     'icon' => 'fas fa-tags',
                     'url'  => 'productcategory',
-                ]
+                ],
+                [
+                    'text' => 'Roles',
+                    'icon' => 'fas fa-user',
+                    'url'  => 'role',
+                ],
+                [
+                    'text' => 'Payment Method',
+                    'icon' => 'fas fa-money-bill-alt',
+                    'url'  => 'paymentmethod',
+                ],
             ]
         ],
         [
@@ -339,6 +349,11 @@ return [
                     'text' => 'User',
                     'icon' => 'far fa-fw fa-user',
                     'url'  => 'user',
+                ],
+                [
+                    'text' => 'System Paramater',
+                    'icon' => 'fas fa-cogs',
+                    'url'  => 'systemparameter',
 
                 ]
               

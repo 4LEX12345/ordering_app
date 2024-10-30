@@ -28,6 +28,22 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/user/destroy/{id}', [App\Http\Controllers\UserController::class, 'destroy'])->name('destroy');
     Route::post('/user/changepassword', [App\Http\Controllers\UserController::class, 'changePassword'])->name('changePassword');
 
+    Route::prefix('/role')->group(function() {
+        Route::get('/', [App\Http\Controllers\RoleController::class, 'index']);
+        Route::get('fetchdata', [App\Http\Controllers\RoleController::class, 'fetchData']);
+        Route::post('store', [App\Http\Controllers\RoleController::class, 'store']);
+        Route::put('update/{id}', [App\Http\Controllers\RoleController::class, 'update']);
+        Route::get('destroy/{id}', [App\Http\Controllers\RoleController::class, 'destroy']);
+    });
+
+    Route::prefix('/paymentmethod')->group(function() {
+        Route::get('/', [App\Http\Controllers\PaymentMethodController::class, 'index']);
+        Route::get('fetchdata', [App\Http\Controllers\PaymentMethodController::class, 'fetchData']);
+        Route::post('store', [App\Http\Controllers\PaymentMethodController::class, 'store']);
+        Route::put('update/{id}', [App\Http\Controllers\PaymentMethodController::class, 'update']);
+        Route::get('destroy/{id}', [App\Http\Controllers\PaymentMethodController::class, 'destroy']);
+    });
+
 
     Route::prefix('/brand')->group(function() {
         Route::get('/', [App\Http\Controllers\BrandController::class, 'index']);
@@ -70,11 +86,20 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('destroy/{id}', [App\Http\Controllers\OrderHeaderController::class, 'destroy']);
         Route::get('generateinvoice/{id}', [App\Http\Controllers\OrderHeaderController::class, 'generateInvoice']);
         Route::get('generatefinalinvoice/{id}', [App\Http\Controllers\OrderHeaderController::class, 'generateFinalInvoice']);
-        
         Route::get('showinvoice', [App\Http\Controllers\OrderHeaderController::class, 'showInvoice']);
         Route::get('showfinalinvoice', [App\Http\Controllers\OrderHeaderController::class, 'showFinalInvoice']);
     });
-  
 
+    Route::prefix('/systemparameter')->group(function() {
+        Route::get('/', [App\Http\Controllers\SystemParameterController::class, 'index']);
+        Route::get('fetchdata', [App\Http\Controllers\SystemParameterController::class, 'fetchData']);
+        Route::post('store', [App\Http\Controllers\SystemParameterController::class, 'store']);
+        Route::put('update/{id}', [App\Http\Controllers\SystemParameterController::class, 'update']);
+        Route::get('destroy/{id}', [App\Http\Controllers\SystemParameterController::class, 'destroy']);
+    });
+
+   
+  
+    
     
 });

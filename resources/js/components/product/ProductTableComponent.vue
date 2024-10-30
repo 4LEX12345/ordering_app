@@ -5,8 +5,8 @@
                 <span>{{ formatRoles(row) }}</span>
               </template>
               <template v-slot:actions="{ row }">
-                <button class="btn" v-on:click="edit(row)"><i class="fas fa-edit text-primary"></i></button>
-                <button class="btn" v-on:click="destroy(row)"><i class="fas fa-trash text-danger"></i></button>
+                <button class="button edit-btn"  v-on:click="edit(row)"> <i class="fas fa-edit text-primary text-light"></i> Edit</button>
+                <button class="button delete-btn" v-on:click="destroy(row)"> <i class="fas fa-trash text-light"></i> Delete</button>
               </template>
         </v-client-table>
     </div>

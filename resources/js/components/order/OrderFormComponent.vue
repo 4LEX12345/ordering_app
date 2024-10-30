@@ -69,7 +69,7 @@
             <div class="row">
                 <div class="col-md-7">
                     <div class="d-flex justify-content-end mb-3">
-                        <button class="btn btn-success mr-2" v-on:click="addProduct()">Add Item</button>
+                        <button class="button add-btn  mr-2" v-on:click="addProduct()">Add Item</button>
                     </div>
                     <v-client-table  :data="items" :columns="columns" :options="options">
                     <template v-slot:role="{ row }">
@@ -114,7 +114,7 @@
                             </div> 
                             <div class="col-md-12" >
                                 <div class="d-md-flex">
-                                    <button class="btn btn-secondary" style="font-size: 10px;" v-on:click="togglePayment">Add Payment</button>
+                                    <button class="button add-btn" style="font-size: 10px;" v-on:click="togglePayment">Add Payment</button>
                                     <div class="ml-2" v-if="inputPayment">
                                         <div class="d-md-flex" v-show="inputPayment">
                                         <input type="text" class="form-control" v-model="payment" style="font-size: 10px;">
@@ -157,14 +157,14 @@
             </div>
         </div>
         <div class="col-12 text-right">
-            <button class="btn btn-warning mr-2" v-on:click="toogleCancel()">Cancel</button>
-            <button class="btn btn-primary mr-2" v-show="toggleCreate" v-if="customerInformationForm" v-on:click="createOrder" :disabled="!isInputComplete">Proceed to create order</button>
+            <button class="button close-btn mr-2" v-on:click="toogleCancel()">Cancel</button>
+            <button class="button create-btn mr-2" v-show="toggleCreate" v-if="customerInformationForm" v-on:click="createOrder" :disabled="!isInputComplete">Proceed to create order</button>
             <!-- <button class="btn btn-primary mr-2 " v-show="toggleCreate" v-if="!customerInformationForm" v-on:click="store" >Save</button> -->
-            <button class="btn btn-primary" v-show="toggleCreate" v-if="!customerInformationForm" v-on:click="store" >Save and Generate Invoice</button>
+            <button class="button create-btn" v-show="toggleCreate" v-if="!customerInformationForm" v-on:click="store" >Save and Generate Invoice</button>
         </div>
 
         <div class="modal fade" id="product-modal"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel" >Product List</h5>
@@ -178,7 +178,7 @@
                         <div style="height: 500px; overflow-y: scroll; overflow-x: hidden; width: 100%;" class="p-2 ">
                             <div class="row">
                                 <div class="col-md-4" v-for="item in productFilter ">
-                                    <div class="card m-3">
+                                    <div class="card m-3 p-3">
                                         <img :src="'/storage/'+ item.image" alt="test" width="150" height="150" class="m-auto p-3">
                                         <div class="card-body">
                                             <span style="font-size: 15px; font-weight: 400;">Name : {{ item.name}}  </span>
@@ -201,8 +201,8 @@
                                          
                                             </div>
                                         </div>
-                                        <div class="mb-3 p-2">
-                                            <button class="w-100 btn btn-primary" v-on:click="addItem(item)">Add</button>
+                                        <div class="mb-3 text-center">
+                                            <button class=" w-75 button add-btn" v-on:click="addItem(item)">Add</button>
                                         </div>
                                     </div>
                                 </div>
@@ -271,7 +271,7 @@
                     payment_method : '',
                     payment : 0,
                 },
-                customerInformationForm : true,
+                customerInformationForm : false,
                 searchItem : '',
                 productList : [],
                 payment : 0,

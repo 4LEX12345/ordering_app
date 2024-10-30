@@ -10,8 +10,8 @@
       <div class="main-container p-5 pt-3 " >
         <div class="row mb-2" v-show="!toggleCreate && !toggleEdit">
           <div class="col-md-12">
-            <div class="">
-              <button class="custom-add-btn rounded pl-3 pr-3 pt-2 pb-2" v-on:click="create"><i class="fas fa-solid fa-plus"></i></button>
+            <div class="m-auto text-right">
+              <button class="button create-btn create-btn:hover" v-on:click="create">Create New <i class="fas fa-solid fa-plus"></i></button>
             </div>
           </div>
         </div>

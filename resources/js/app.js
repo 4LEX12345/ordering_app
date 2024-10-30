@@ -11,6 +11,8 @@ import FlavorComponent from './components/masterdata/FlavorComponent.vue';
 import ProductCategoryComponent from './components/masterdata/ProductCategoryComponent.vue';
 import ProductComponent from './components/product/ProductComponent.vue';
 import OrderComponent from './components/order/OrderComponent.vue';
+import SystemParameterComponent from './components/system/SystemParameterComponent.vue';
+import PaymentMethodComponent from './components/masterdata/PaymentMethodComponent.vue';
 
 // Create Vue application
 const app = createApp({});
@@ -22,6 +24,8 @@ app.component('flavor-component', FlavorComponent);
 app.component('product-category-component', ProductCategoryComponent);
 app.component('product-component', ProductComponent);
 app.component('order-component', OrderComponent);
+app.component('system-parameter-component', SystemParameterComponent);
+app.component('payment-method-component', PaymentMethodComponent);
 
 
 app.use(ClientTable);

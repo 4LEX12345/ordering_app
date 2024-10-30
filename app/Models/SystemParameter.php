@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class SystemParameter extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['invoice_num', 'tracking_num'];
 }

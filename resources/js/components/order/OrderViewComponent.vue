@@ -121,11 +121,12 @@
                 </div>
             </div>
             <div class="col-12 text-right">
-            <button class="btn btn-warning mr-2" v-on:click="toogleCancel()">Cancel</button>
-            <button class="btn btn-primary" v-on:click="generateInvoice" v-if="grandTotal != 0">Generate Invoice</button>
+            <button class="button close-btn mr-2" v-on:click="toogleCancel()">Cancel</button>
+            <button class="button create-btn" v-on:click="generateInvoice" v-if="grandTotal != 0">Generate Invoice</button>
             <button class="btn btn-primary" v-on:click="generateFinalInvoice" v-else>Generate Final Invoice</button>
         </div>
         </div>
+        
         <div class="modal fade" id="add-payment-modal"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -156,8 +157,7 @@
                             <span v-if="errors.amount" class="error-message" style="color: red;">{{ errors.amount[0]}}</span>
                         </div>
                         <div class="text-right">
-                            <button class="btn btn-outline-danger mr-2" v-on:click="closeModal">Cancel</button>
-
+                            <button class="button cancel-btn mr-2" v-on:click="closeModal">Cancel</button>
                             <button class="btn btn-success" v-on:click="update">Save</button>
                         </div>
                     </div>

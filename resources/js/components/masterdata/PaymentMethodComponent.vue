@@ -3,7 +3,7 @@
       <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item">Master Data</li>
-              <li class="breadcrumb-item active" aria-current="page"><a href="role">Role</a></li>
+              <li class="breadcrumb-item active" aria-current="page"><a href="brand">Brand</a></li>
         </ol>
       </nav>
       <div class="row mb-4 mt-4">
@@ -31,12 +31,12 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel" >Add Role</h5>
+                        <h5 class="modal-title" id="exampleModalLabel" >Add Brand</h5>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="first_name">Role Name</label>
-                            <input v-model="role.name" type="text"  id="first_name" :class="{'form-control': true, 'border border-danger': errors.name}">
+                            <label for="first_name">Brand Name</label>
+                            <input v-model="paymentMethod.name" type="text"  id="first_name" :class="{'form-control': true, 'border border-danger': errors.name}">
                             <span v-if="errors.name" class="error-message">{{ errors.name[0]}}</span>
                         </div>
                     </div>
@@ -69,7 +69,7 @@ export default {
       isEdit : false,
       errors : [],
 
-      //table for role
+      //table for brand
       tableData:[],
       columns: ['id', 'name','actions'],
       options: {
@@ -80,18 +80,18 @@ export default {
       },
 
       //variables
-      role  : [],
+      paymentMethod  : [],
 
     };
   },
   methods: {
     init(){
-      this.role.name = '';
+      this.paymentMethod.name = '';
     },
     getData(){
-      axios.get('role/fetchdata').then(response => 
+      axios.get('paymentmethod/fetchdata').then(response => 
         {
-          this.tableData = response.data.roles;
+          this.tableData = response.data.payment_methods;
         }).catch(error => {
           toast.warning('Sorry Something Went Wrong!', {
             position: toast.POSITION.TOP_RIGHT,
@@ -104,14 +104,14 @@ export default {
         });
     },
     create(){
-      this.role.name = '';
+      this.paymentMethod.name = '';
       this.isEdit = false;
       $('#create-modal').modal('show');
     },
     store(){
       this.loading = true;
-      axios.post('role/store', {
-          name : this.role.name,
+      axios.post('paymentmethod/store', {
+          name : this.paymentMethod.name,
       }).then(response => {
         toast.success(response.data.message, {
           position: toast.POSITION.TOP_RIGHT,
@@ -129,14 +129,14 @@ export default {
     },
     edit(row){
       this.isEdit = true;
-      this.role.id = row.id;
-      this.role.name = row.name;
+      this.paymentMethod.id = row.id;
+      this.paymentMethod.name = row.name;
       $('#create-modal').modal('show');
     },
     update(){
       this.loading = true;
-      axios.put(`role/update/${this.role.id}`, {
-          name : this.role.name,
+      axios.put(`paymentmethod/update/${this.paymentMethod.id}`, {
+          name : this.paymentMethod.name,
       }).then(response => {
         toast.success(response.data.message, {
           position: toast.POSITION.TOP_RIGHT,
@@ -165,7 +165,7 @@ export default {
 
         if(result.isConfirmed){
           this.loading = true;
-          axios.get('role/destroy/' + row.id).then(response => {
+          axios.get('paymentmethod/destroy/' + row.id).then(response => {
             toast.success(response.data.message, {
               position: toast.POSITION.TOP_RIGHT,
               autoClose: 3000,

@@ -79,6 +79,26 @@
             font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
             font-size:12px;
         }
+
+        .button { padding: 10px 20px; margin: 5px; border: none; border-radius: 5px; color: #fff; cursor: pointer; font-family: Arial, sans-serif; transition: background-color 0.3s ease; } 
+        .create-btn { background-color: #4CAF50; } 
+        .create-btn:hover { background-color: #45A049; } 
+        .edit-btn { background-color: #008CBA; } 
+        .edit-btn:hover { background-color: #007BB5; } 
+        .delete-btn { background-color: #f44336; } 
+        .delete-btn:hover { background-color: #da190b; } 
+        .update-btn { background-color: #ff9800; } 
+        .update-btn:hover { background-color: #fb8c00; }
+        .close-btn { background-color: #9E9E9E; } 
+        .close-btn:hover { background-color: #757575; } 
+        .save-btn { background-color: #4CAF50; } 
+        .save-btn:hover { background-color: #45A049; }
+        .view-btn { background-color: #00BCD4; } 
+        .view-btn:hover { background-color: #00ACC1; }
+        .add-btn { background-color: #673AB7; } 
+        .add-btn:hover { background-color: #5E35B1; }
+        .change-password-btn { background-color: #E91E63; } 
+        .change-password-btn:hover { background-color: #D81B60; }
     </style>
 
 </head>

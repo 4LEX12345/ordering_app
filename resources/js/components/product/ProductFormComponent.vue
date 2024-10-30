@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="container mt-5">
+        <div class="container ">
     <ul class="nav nav-pills mb-4" id="pills-tab" role="tablist">
       <li class="nav-item" v-for="(step, index) in steps" :key="index">
         <a
@@ -92,9 +92,7 @@
 
                 </div>
              
-                <button class="btn btn-warning mr-2" v-on:click="toogleCancel()">Cancel</button>
-                <button class="btn btn-primary" v-show="toggleCreate" v-on:click="store">Create Product</button>
-                <button class="btn btn-primary" v-show="toggleEdit" v-on:click="update">Update Product</button>
+             
             </div>
 
             <div class="col-6">
@@ -126,6 +124,11 @@
                 </div>
                 <span v-if="errors.image" class="error-message">{{ errors.image[0]}}</span>
             </div>
+        </div>
+        <div class="m-auto text-right">
+            <button class="button close-btn mr-2" v-on:click="toogleCancel()">Cancel</button>
+            <button class="button create-btn" v-show="toggleCreate" v-on:click="store">Create Product</button>
+            <button class="button update-btn" v-show="toggleEdit" v-on:click="update">Update Product</button>
         </div>
 
         <LoadingOverlayComponent :isVisible="loading" />
