@@ -123,7 +123,7 @@
             <div class="col-12 text-right">
             <button class="button close-btn mr-2" v-on:click="toogleCancel()">Cancel</button>
             <button class="button create-btn" v-on:click="generateInvoice" v-if="grandTotal != 0">Generate Invoice</button>
-            <button class="btn btn-primary" v-on:click="generateFinalInvoice" v-else>Generate Final Invoice</button>
+            <button class="button create-btn" v-on:click="generateFinalInvoice" v-else>Generate Final Invoice</button>
         </div>
         </div>
         

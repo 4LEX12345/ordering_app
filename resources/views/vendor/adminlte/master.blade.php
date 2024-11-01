@@ -80,7 +80,26 @@
             font-size:12px;
         }
 
-        .button { padding: 10px 20px; margin: 5px; border: none; border-radius: 5px; color: #fff; cursor: pointer; font-family: Arial, sans-serif; transition: background-color 0.3s ease; } 
+        .button {  
+            margin-right: 5px;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            background-color: #488aec;
+            color: #ffffff;
+            font-size: 0.75rem;
+            line-height: 1rem;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+            text-transform: uppercase;
+            border-radius: 0.5rem;
+            user-select: none;
+            gap: 0.75rem;
+            box-shadow:
+            0 4px 6px -1px #488aec31,
+            0 2px 4px -1px #488aec17;
+            transition: all 0.6s ease; 
+        } 
         .create-btn { background-color: #4CAF50; } 
         .create-btn:hover { background-color: #45A049; } 
         .edit-btn { background-color: #008CBA; } 

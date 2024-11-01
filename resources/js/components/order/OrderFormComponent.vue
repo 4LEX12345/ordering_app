@@ -158,8 +158,16 @@
         </div>
         <div class="col-12 text-right">
             <button class="button close-btn mr-2" v-on:click="toogleCancel()">Cancel</button>
-            <button class="button create-btn mr-2" v-show="toggleCreate" v-if="customerInformationForm" v-on:click="createOrder" :disabled="!isInputComplete">Proceed to create order</button>
-            <!-- <button class="btn btn-primary mr-2 " v-show="toggleCreate" v-if="!customerInformationForm" v-on:click="store" >Save</button> -->
+            <button :class="{
+                'button mr-2' : true,
+                'create-btn' : isInputComplete,
+                'close-btn' : !isInputComplete,
+            }" 
+            v-show="toggleCreate"
+            v-if="customerInformationForm" 
+            v-on:click="createOrder" 
+            :disabled="!isInputComplete"
+             >Proceed to create order</button>
             <button class="button create-btn" v-show="toggleCreate" v-if="!customerInformationForm" v-on:click="store" >Save and Generate Invoice</button>
         </div>
 
@@ -271,7 +279,7 @@
                     payment_method : '',
                     payment : 0,
                 },
-                customerInformationForm : false,
+                customerInformationForm : true,
                 searchItem : '',
                 productList : [],
                 payment : 0,

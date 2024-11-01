@@ -297,11 +297,13 @@ return [
         [
             'text' => 'Dashboard',
             'icon' => 'fas fa-fw fa-tachometer-alt',
+            'can' => ['view-masterdata'],
             'url' => 'dashboard',
         ],
         [
             'text' => 'Master Data',
             'icon' => 'fas fa-fw fa-database',
+            'can' => ['view-masterdata'],
             'submenu' => [
                 [
                     'text' => 'Brands',
@@ -335,15 +337,18 @@ return [
             'text' => 'Products',
             'icon' => 'fas fa-box',
             'url'  => 'product',
+            'can' => ['view-products'],
         ],
         [
             'text' => 'Order',
             'icon' => 'fas fa-receipt',
+            'can' => ['view-order'],
             'url'  => 'order',
         ],
         [
             'text' => 'System',
             'icon' => 'fas fa-fw fa-cog',
+            'can' => ['view-system'],
             'submenu' => [
                 [
                     'text' => 'User',
