@@ -8,12 +8,14 @@ use App\Models\Customer;
 use App\Models\OrderDetail;
 use App\Models\OrderHeader;
 use Illuminate\Http\Request;
+use Laravel\Ui\Presets\React;
+use App\Models\PaymentHistory;
 use App\Models\SystemParameter;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\OrderRequest;
-use App\Models\PaymentHistory;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Laravel\Ui\Presets\React;
+use App\Http\Requests\OrderHeaderRequest;
 
 class OrderHeaderController extends Controller
 {
@@ -42,6 +44,8 @@ class OrderHeaderController extends Controller
             $item->contact_person_email = $item->customer->contact_person_email;
             $item->billing_address = $item->customer->billing_address;
             $item->shipping_address = $item->customer->shipping_address;
+            $item->user_id = $item->user->id;
+            $item->user_name = $item->user->name;
             return $item;
         });
 
@@ -79,6 +83,7 @@ class OrderHeaderController extends Controller
                 $order_header->payment_status  = 'pending';
                 $order_header->delivery_status  = 'pending';
                 $order_header->invoice_num = $system_param->invoice_num;
+                $order_header->user_id = Auth::user()->id;
                 $order_header->save();
                 if($order_header){
                     //save the payment if it has value or != 0
@@ -107,8 +112,6 @@ class OrderHeaderController extends Controller
                     //update the system parameter e.g invoice_num and tracking_num
                     $this->updateSystemParam(); //increment the values
                 }
-
-
                 //update the payment status if fully paid  
                 $is_paid = $total_payment == $order_header->total_amount ;
                 $update_order_status = OrderHeader::find($order_header->id);
@@ -116,10 +119,16 @@ class OrderHeaderController extends Controller
                 $update_order_status->save();
             }
             DB::commit();
-            return response()->json(['message' => 'success', 'order_id' => $order_header->id,'is_paid' => $is_paid], 200);
+            return response()->json([
+                'message' => 'success', 
+                'order_id' => $order_header->id,
+                'is_paid' => $is_paid
+            ],200);
         }
         catch(\Exception $e){
+            //rollback if there is an error saving all the data 
             DB::rollback();
+            //delete the image stored if there is 
             if($path){
                 Storage::disk('public')->delete($path);
             }
@@ -137,13 +146,16 @@ class OrderHeaderController extends Controller
         });
         return response()->json(['data' => $data, 'order_details' => $order_details], 200);
     }
-    public function update(Request $request, $id){
+    public function update(OrderHeaderRequest $request, $id){
+
+        $validated = $request->validated();
+
         $payment = new PaymentHistory();
         $payment->order_header_id  = $id;
-        $payment->amount   = $request->data['amount'];
-        $payment->payment_date  =$request->data['order_date'];
-        $payment->payment_method  =$request->data['payment_method'];
-        $payment->save();
+        $payment->amount   = $validated['amount'];
+        $payment->payment_date  =$validated['payment_date'];
+        $payment->payment_method  =$validated['payment_method'];
+        $payment->save();   
 
         $data = OrderHeader::with(['customer', 'orderDetails', 'payments'])->find($id);
         $order_details = OrderDetail::where('order_header_id', $data->id)
@@ -154,23 +166,31 @@ class OrderHeaderController extends Controller
             return $item;
         });
 
-        return response()->json(['message' => 'success','data' => $data, 'order_details' => $order_details ], 200);
+        return response()->json(['message' => 'Payment Updated!','data' => $data, 'order_details' => $order_details ], 200);
     }
     public function generateInvoice($id){
         $order = OrderHeader::findOrFail($id);
+         //store all the order information into session
         session()->put('order', $order);
         return response()->json(['message'=> 'success'], 200);
     }
     public function generateFinalInvoice($id){
+        //update the order into paid and delivered
         $order = OrderHeader::findOrFail($id);
+        $order->payment_status = 'paid';
+        $order->delivery_status = 'delivered';
+        $order->save();
+        //store all the order information into session
         session()->put('order', $order);
         return response()->json(['message'=> 'success'], 200);
     }
     public function showInvoice(){
+        //retrieve the order information into the session from generateInvoice() function
         $order = session()->get('order');
         return view('invoice.invoice', compact('order'));
     }
     public function showFinalInvoice(){
+        //retrieve the order information into the session from generateFinalInvoice() function
         $order = session()->get('order');
         return view('invoice.finalinvoice', compact('order'));
     }
