@@ -136,9 +136,9 @@
                     </div>
                     <div class="modal-body" >
                         <div class="form-group">
-                            <label for="payment_method">Payment Date</label>
-                            <input type="date" class="form-control" v-model="orderInfo.order_date">
-                            <span v-if="errors.payment_method" class="error-message" style="color: red;">{{ errors.payment_method[0]}}</span>
+                            <label for="payment_date">Payment Date</label>
+                            <input type="date" class="form-control" v-model="orderInfo.payment_date">
+                            <span v-if="errors.payment_date" class="error-message" style="color: red;">{{ errors.payment_date[0]}}</span>
                         </div>
                         <div class="form-group">
                             <label for="payment_method">Payment Method</label>
@@ -152,13 +152,21 @@
                             <span v-if="errors.payment_method" class="error-message" style="color: red;">{{ errors.payment_method[0]}}</span>
                         </div>
                         <div class="form-group">
-                            <label for="payment_method">Payment Amount</label>
+                            <label for="amount">Payment Amount</label>
                             <input type="text" class="form-control" v-model="orderInfo.amount">
-                            <span v-if="errors.amount" class="error-message" style="color: red;">{{ errors.amount[0]}}</span>
+                            <span v-if="errors.amount" class="error-message" style="color: red;">{{ errors.amount[0]}}<br></span>
+                            <span v-if="amountValidate" class="error-message" style="color: red;">Invalid Amount Tendered</span>
+                            
                         </div>
                         <div class="text-right">
                             <button class="button cancel-btn mr-2" v-on:click="closeModal">Cancel</button>
-                            <button class="btn btn-success" v-on:click="update">Save</button>
+                            <button :class="{
+                                'button' : true,
+                                'close-btn' : amountValidate,
+                                'save-btn' : !amountValidate,
+                            }" 
+                            v-on:click="update" 
+                            >Save</button>
                         </div>
                     </div>
                 </div>
@@ -188,7 +196,7 @@
             orderDetails : {
                 type : Array,
                 default : [],
-            }
+            },
         },  
         data(){
             return {
@@ -306,14 +314,31 @@
                 }
             },
             addPayment(){
+                this.orderInfo.payment_date = '';
+                this.orderInfo.payment_method = '';
+                this.orderInfo.amount = '';
+                this.errors.payment_date = '';
+                this.errors.payment_method =  '';
+                this.errors.amount =  '';
                 $('#add-payment-modal').modal('show');
             },
             closeModal(){
                 $('#add-payment-modal').modal('hide');
             },
             update(){
+                if(this.amountValidate){
+                    toast.warning('Please enter a valid amount.', {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 3000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    });
+                    return false;
+                }
+
                 this.$emit('update', this.orderInfo, this.orderDataInformation.id);
-                $('#add-payment-modal').modal('hide');
             },
             generateInvoice(){
                 this.$emit('generateInvoice', this.orderDataInformation.id);
@@ -359,6 +384,9 @@
             },
             grandTotal(){
                 return Number(this.subTotal) - Number(this.totalPayment);
+            },
+            amountValidate(){
+                return Number(this.orderInfo.amount) > (Number(this.subTotal) - Number(this.totalPayment)) ;
             }
         }
     }

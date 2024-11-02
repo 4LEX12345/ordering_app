@@ -22,9 +22,22 @@
         },  
         data(){
             return {
-                columns: ['id','order_date','tracking_number','business_name','contact_person','contact_person_contact_number', 'contact_person_email', 'billing_address',
-,'shipping_address','actions'],
+                columns: [
+                'id',
+                'order_date',
+                'tracking_number',
+                'business_name',
+                'contact_person',
+                'contact_person_contact_number', 
+                'contact_person_email',
+                'billing_address',
+                'shipping_address',
+                'user_name',
+                'actions'],
                 options: {
+                    headings : {
+                        'user_name' : 'Created By',
+                    },
                     pagination : {
                     virtual : true,
                     },

@@ -79,9 +79,9 @@
                                 <img src="{{ asset('your-logo-here.jpg') }}" style="width:100%; max-width:90px;">
                             </td>
                             <td>
-                                Invoice #: 004<br>
-                                Date: 2024-10-25<br>
-                                Status: <span class="paid">Paid in Full</span>
+                                Invoice #: {{$order->invoice_num}}<br>
+                                Date:  {{$order->order_date}}<br>
+                                Status: <span class="paid">Fully Paid</span>
                             </td>
                         </tr>
                     </table>
@@ -94,18 +94,18 @@
                         <tr>
                             <td>
                                 <strong>To :</strong><br>
-                                Business Name : ads<br>
-                                Billing Address : asd<br>
-                                Shipping Address : asd<br>
+                                Business Name : <span style="font-weight: 700;">{{$order->customer->business_name}}</span><br>
+                                Billing Address : <span style="font-weight: 700;">{{$order->customer->billing_address}}</span><br>
+                                Shipping Address : <span style="font-weight: 700;">{{$order->customer->shipping_address}}</span><br>
                             </td>
                         
                         </tr>
                         <tr>
                         <td>
                                 <strong>Contact Information :</strong><br>
-                                Name : asd<br>
-                                Phone Number : 9054339606<br>
-                                Email : alex@gmail.com<br>
+                                Name :  <span style="font-weight: 700;">{{$order->customer->contact_person}}</span><br>
+                                Phone Number : <span style="font-weight: 700;">{{$order->customer->contact_person_contact_number}}</span><br>
+                                Email : <span style="font-weight: 700;">{{$order->customer->contact_person_email}}</span><br>
                             </td>
                         </tr>
                     </table>
@@ -117,16 +117,21 @@
                 <td>Total</td>
             </tr>
 
-            <tr class="item">
-                <td>FLAVA STRAWBERRY (Test) - 2 pcs @ 500.00</td>
-                <td>1,000.00</td>
-            </tr>
+            @php
+                $totalAmountItem = 0;
+            @endphp
+
+            @foreach($order->orderDetails as $item)
+            @php
+                $total = $item->unit_price  * $item->quantity;
+                $totalAmountItem += $total;
+            @endphp
 
             <tr class="item">
-                <td>FLAVA RED VELVET (This is Red Velvet) - 22 pcs @ 65.00</td>
-                <td>1,430.00</td>
+                <td>{{$item->product->name}} - {{ $item->quantity }} pc/s @ {{ $item->unit_price }}</td>
+                <td>{{ number_format($total, 2, '.',',') }}</td>
             </tr>
-
+            @endforeach
             <tr class="item last">
                 <td><em>*NOTHING FOLLOWS*</em></td>
                 <td></td>
@@ -134,12 +139,17 @@
 
             <tr class="total">
                 <td></td>
-                <td>Subtotal: 2,430.00</td>
+                <td>Subtotal: {{ number_format($totalAmountItem, 2, '.',',') }}</td>
             </tr>
-
+            @if($order->payments->count() > 0)
             <tr class="total">
                 <td></td>
-                <td>Balance: 0.00</td>
+                <td>Downpayment: {{ number_format($order->payments->sum('amount'), 2, '.',',') }}</td>
+            </tr>
+            @endif
+            <tr class="total">
+                <td></td>
+                <td>Balance: {{ number_format( $totalAmountItem - $order->payments->sum('amount') , 2, '.',',') }}</td>
             </tr>
         </table>
 

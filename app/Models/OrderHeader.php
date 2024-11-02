@@ -21,4 +21,8 @@ class OrderHeader extends Model
         return $this->hasMany(PaymentHistory::class);
     }
 
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
 }

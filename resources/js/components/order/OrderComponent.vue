@@ -197,10 +197,13 @@
               draggable: true,
             });
             
+            
             if(response.data.is_paid){
+              // if the items are fully paid
               this.generateFinalInvoice(response.data.order_id);
             }
             else{
+               // if the items are not fully paid
               this.generateInvoice(response.data.order_id);
 
             }
@@ -249,11 +252,24 @@
       async update(data, id){
         this.loading = true;
         await axios.put('order/update/' + id, {
-          data : data
+          payment_date : data.payment_date,
+          payment_method : data.payment_method,
+          amount : data.amount,
         }).then(response => {
+          $('#add-payment-modal').modal('hide');  
+          toast.success(response.data.message, {
+              position: toast.POSITION.TOP_RIGHT,
+              autoClose: 3000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+            });
           this.orderData = response.data.data;
           this.orderDetails = response.data.order_details;
         }).catch(errors => {
+          $('#add-payment-modal').modal('show');     
+          this.errors = errors.response.data.errors;
           toast.warning('Sorry Something Went Wrong!', {
               position: toast.POSITION.TOP_RIGHT,
               autoClose: 3000,
