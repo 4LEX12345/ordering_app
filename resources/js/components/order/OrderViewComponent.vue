@@ -144,10 +144,7 @@
                             <label for="payment_method">Payment Method</label>
                             <select name="payment_method" id="payment_method" class="form-control" v-model="orderInfo.payment_method">
                                 <option value="">Select Payment Method</option>
-                                <option value="1">Credit Card</option>
-                                <option value="2">Debit Card</option>
-                                <option value="3">Bank Transfer</option>
-                                <option value="4">Cash on Delivery</option>
+                                <option v-for="item in paymentMethods" :value="item.id">{{ item.name}}</option>
                             </select>
                             <span v-if="errors.payment_method" class="error-message" style="color: red;">{{ errors.payment_method[0]}}</span>
                         </div>
@@ -197,6 +194,14 @@
                 type : Array,
                 default : [],
             },
+            paymentMethods :{
+                type : Array,
+                default : [],
+            },
+            paymentDetails : {
+                type : Array,
+                default : [],
+            }
         },  
         data(){
             return {
@@ -260,8 +265,11 @@
                 },
 
                 payments : [],
-                columns: [ 'payment_date','amount','payment_method'],
+                columns: [ 'payment_date','amount','payment_method_name'],
                 options: {
+                    headings : {
+                        payment_method_name : 'Payment Method',
+                    },
                     pagination : {
                     virtual : true,
                     },
@@ -359,7 +367,7 @@
                 return this.orderData;
             },
             paymentLists(){
-                return this.orderData.payments;
+                return this.paymentDetails;
             },
             orderDetail(){
                 return this.orderDetails  ;

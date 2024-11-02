@@ -3,7 +3,7 @@
       <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item">Master Data</li>
-              <li class="breadcrumb-item active" aria-current="page"><a href="brand">Brand</a></li>
+              <li class="breadcrumb-item active" aria-current="page"><a href="brand">Payment Method</a></li>
         </ol>
       </nav>
       <div class="row mb-4 mt-4">
@@ -31,11 +31,11 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel" >Add Brand</h5>
+                        <h5 class="modal-title" id="exampleModalLabel" >Add Payment Method</h5>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="first_name">Brand Name</label>
+                            <label for="first_name">Payment Method</label>
                             <input v-model="paymentMethod.name" type="text"  id="first_name" :class="{'form-control': true, 'border border-danger': errors.name}">
                             <span v-if="errors.name" class="error-message">{{ errors.name[0]}}</span>
                         </div>

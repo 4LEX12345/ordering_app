@@ -34,6 +34,7 @@
                 :dateToday="dateToday"
                 :trackingNumber="trackingNumber"
                 :productsData="productsData"
+                :paymentMethods="paymentMethods"
                 :errors="errors"
                 @store="store"
             ></order-form-component>
@@ -45,6 +46,8 @@
                 @cancelCreation="cancelCreation"
                 :orderData="orderData"
                 :orderDetails="orderDetails"
+                :paymentMethods="paymentMethods"
+                :paymentDetails="paymentDetails"
                 :errors="errors"
                 @update="update"
                 @store="store"
@@ -88,6 +91,8 @@
         productsData : [],
         orderData : {},
         orderDetails : [],
+        paymentDetails : [],
+        paymentMethods : [],
    
         //variables
         customerInformation : {
@@ -133,6 +138,7 @@
             this.trackingNumber = response.data.tracking_number;
             this.productsData = response.data.products;
             this.tableData = response.data.orders;
+            this.paymentMethods = response.data.payment_methods;
             this.isRendered = true; //to make sure the fetchdata rendered first. this will solve the reactivity of the child-parent component
           }).catch(error => {
             toast.warning('Sorry Something Went Wrong!', {
@@ -150,6 +156,7 @@
         await axios.get('/order/edit/' + row.id).then(response => {
           this.orderData = response.data.data;
           this.orderDetails = response.data.order_details;
+          this.paymentDetails = response.data.payments;
           this.toggleEdit = true;
           this.toggleCreate = false;
         }).catch(errors => {
@@ -210,6 +217,14 @@
     
         }).catch(error => {
           this.errors = error.response.data.errors;
+          toast.warning('Something went wrong!', {
+              position: toast.POSITION.TOP_RIGHT,
+              autoClose: 3000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+            });
           console.log(this.errors);
         }).finally(() => {this.loading = false});
       },
@@ -267,6 +282,7 @@
             });
           this.orderData = response.data.data;
           this.orderDetails = response.data.order_details;
+          this.paymentDetails = response.data.payments;
         }).catch(errors => {
           $('#add-payment-modal').modal('show');     
           this.errors = errors.response.data.errors;
