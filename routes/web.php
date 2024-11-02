@@ -82,12 +82,13 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('fetchdata', [App\Http\Controllers\OrderHeaderController::class, 'fetchData']);
         Route::post('store', [App\Http\Controllers\OrderHeaderController::class, 'store']);
         Route::get('/edit/{id}', [App\Http\Controllers\OrderHeaderController::class, 'edit']);
-        Route::put('update/{id}', [App\Http\Controllers\OrderHeaderController::class, 'update']);
+        Route::post('update', [App\Http\Controllers\OrderHeaderController::class, 'update']);
         Route::get('destroy/{id}', [App\Http\Controllers\OrderHeaderController::class, 'destroy']);
         Route::get('generateinvoice/{id}', [App\Http\Controllers\OrderHeaderController::class, 'generateInvoice']);
         Route::get('generatefinalinvoice/{id}', [App\Http\Controllers\OrderHeaderController::class, 'generateFinalInvoice']);
         Route::get('showinvoice', [App\Http\Controllers\OrderHeaderController::class, 'showInvoice']);
         Route::get('showfinalinvoice', [App\Http\Controllers\OrderHeaderController::class, 'showFinalInvoice']);
+        Route::get('downloadproofofpayment/{path}', [App\Http\Controllers\OrderHeaderController::class, 'downloadProofOfPayment'])->where('path', '.*');
     });
 
     Route::prefix('/systemparameter')->group(function() {

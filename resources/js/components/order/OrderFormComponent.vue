@@ -104,7 +104,10 @@
                                     <label for="payment_method">Payment Method</label>
                                     <select name="payment_method" id="payment_method" class="form-control" v-model="orderInfo.payment_method">
                                         <option value="">Select Payment Method</option>
-                                        <option v-for="item in paymentMethods" :value="item.id">{{ item.name}}</option>
+                                        <option value="1">Credit Card</option>
+                                        <option value="2">Debit Card</option>
+                                        <option value="3">Bank Transfer</option>
+                                        <option value="4">Cash on Delivery</option>
                                     </select>
                                     <span v-if="errors.payment_method" class="error-message" style="color: red;">{{ errors.payment_method[0]}}</span>
                                 </div>
@@ -153,9 +156,6 @@
                 </div>
             </div>
         </div>
-        <div class=" col-12 m-auto text-right mr-4">
-            <p v-if="!isInputComplete" class="error-message" style="color: red;">Please Fill up all the fields</p>
-        </div>
         <div class="col-12 text-right">
             <button class="button close-btn mr-2" v-on:click="toogleCancel()">Cancel</button>
             <button :class="{
@@ -170,7 +170,6 @@
              >Proceed to create order</button>
             <button class="button create-btn" v-show="toggleCreate" v-if="!customerInformationForm" v-on:click="store" >Save and Generate Invoice</button>
         </div>
-       
 
         <div class="modal fade" id="product-modal"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
@@ -264,10 +263,6 @@
             productsData :{
                 type : Array,
                 default : [],
-            },  
-            paymentMethods : {
-                type : Array,
-                default : [],
             }
         },  
         data(){
@@ -284,7 +279,7 @@
                     payment_method : '',
                     payment : 0,
                 },
-                customerInformationForm : true,
+                customerInformationForm : false,
                 searchItem : '',
                 productList : [],
                 payment : 0,

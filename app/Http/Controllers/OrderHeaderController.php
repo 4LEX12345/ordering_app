@@ -165,38 +165,57 @@ class OrderHeaderController extends Controller
             'payments' => $payments,
         ], 200);
     }
-    public function update(OrderHeaderRequest $request, $id){
+    public function update(OrderHeaderRequest $request){
+        DB::beginTransaction();
+        try{
+            $validated = $request->validated();
+            $path = null;
+            if($request->file('image')){
+                $path = $request->file('image')->store('proofofpayments', 'public'); //store the image on public folder
+            }
+            
+            $payment = new PaymentHistory();
+            $payment->order_header_id  = $request->id;
+            $payment->amount   = $validated['amount'];
+            $payment->payment_date  =$validated['payment_date'];
+            $payment->payment_method  =$validated['payment_method'];
+            $payment->proof_of_payment  = $path;
+            $payment->save();   
 
-        $validated = $request->validated();
+            $data = OrderHeader::with(['customer', 'orderDetails', 'payments'])->find($request->id);
+            $payments = PaymentHistory::where('order_header_id', $data->id)
+            ->get()
+            ->map(function($item) {
+                $item->payment_method_name = $item->paymentMethod->name;
+                return $item;
+            });
+            $order_details = OrderDetail::where('order_header_id', $data->id)
+            ->get()
+            ->map(function($item){
+                $item->product_name = $item->product->name;
+                $item->total= $item->quantity * $item->unit_price;  
+                return $item;
+            });
+            
+            DB::commit();
 
-        $payment = new PaymentHistory();
-        $payment->order_header_id  = $id;
-        $payment->amount   = $validated['amount'];
-        $payment->payment_date  =$validated['payment_date'];
-        $payment->payment_method  =$validated['payment_method'];
-        $payment->save();   
+            return response()->json([
+                'message' => 'Payment Updated!',
+                'data' => $data, 
+                'order_details' => $order_details,
+                'payments' => $payments, 
+            ],200);
+            
+        }catch(\Exception $e){
+            DB::rollback();
+            //delete the image stored if there is 
+            if($path){
+                Storage::disk('public')->delete($path);
+            }
+            return response()->json(['message' => 'error', 'error' => $e->getMessage()], 500);
+        }
 
-        $data = OrderHeader::with(['customer', 'orderDetails', 'payments'])->find($id);
-        $payments = PaymentHistory::where('order_header_id', $data->id)
-        ->get()
-        ->map(function($item) {
-            $item->payment_method_name = $item->paymentMethod->name;
-            return $item;
-        });
-        $order_details = OrderDetail::where('order_header_id', $data->id)
-        ->get()
-        ->map(function($item){
-            $item->product_name = $item->product->name;
-            $item->total= $item->quantity * $item->unit_price;  
-            return $item;
-        });
-
-        return response()->json([
-            'message' => 'Payment Updated!',
-            'data' => $data, 
-            'order_details' => $order_details,
-            'payments' => $payments, 
-        ],200);
+        
     }
     public function generateInvoice($id){
         $order = OrderHeader::findOrFail($id);
@@ -223,6 +242,16 @@ class OrderHeaderController extends Controller
         //retrieve the order information into the session from generateFinalInvoice() function
         $order = session()->get('order');
         return view('invoice.finalinvoice', compact('order'));
+    }
+    public function downloadProofOfPayment($path){
+        $decodedPath = urldecode($path); // Decode the URL-encoded path
+        $filePath = storage_path('app/public/' . $decodedPath);
+    
+        if (!Storage::disk('public')->exists($decodedPath)) {
+            return response()->json(['error' => 'File not found.'], 404);
+        }
+    
+        return response()->download($filePath);
     }
     function updateSystemParam(){
         $system_param  = SystemParameter::first();

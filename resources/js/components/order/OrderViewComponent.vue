@@ -86,6 +86,9 @@
                             <template v-slot:role="{ row }">
                                 <span>{{ formatRoles(row) }}</span>
                             </template>
+                            <template v-slot:proof_of_payment="{ row }" >
+                                <button @click="downloadImage(row)" class="button add-btn">Download Attachment</button>
+                            </template>
                         </v-client-table>
                     </div>
 
@@ -153,8 +156,23 @@
                             <input type="text" class="form-control" v-model="orderInfo.amount">
                             <span v-if="errors.amount" class="error-message" style="color: red;">{{ errors.amount[0]}}<br></span>
                             <span v-if="amountValidate" class="error-message" style="color: red;">Invalid Amount Tendered</span>
-                            
                         </div>
+                        <div class="form-group">
+                            <label for="amount">Proof of Payment</label>
+                            <div class="input-group mb-3">
+                                
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Upload</span>
+                            </div>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="inputGroupFile01"  @change="onFileChange">
+                                <label class="custom-file-label" for="inputGroupFile01">{{ orderInfo.proof_of_payment_name != '' ?  orderInfo.proof_of_payment_name :   'Choose File' }}</label>
+                            </div>
+                            </div>
+                            <span v-if="errors.proof_of_payment_name" class="error-message" style="color: red;">{{ errors.proof_of_payment_name[0]}}</span>
+                        </div>
+                         <div>
+                    </div>
                         <div class="text-right">
                             <button class="button cancel-btn mr-2" v-on:click="closeModal">Cancel</button>
                             <button :class="{
@@ -210,13 +228,14 @@
                 activeTab : 'tab1',
 
                 //variables
-                file: null,
                 business_tax_file : [],
                 productList : [],
                 orderInfo : {
                     payment_date : '',
                     payment_method : '',
                     amount : '',
+                    proof_of_payment : null,
+                    proof_of_payment_name : '',
                 },
                 customerInformationForm : true,
                 searchItem : '',
@@ -265,7 +284,7 @@
                 },
 
                 payments : [],
-                columns: [ 'payment_date','amount','payment_method_name'],
+                columns: [ 'payment_date','amount','payment_method_name', 'proof_of_payment'],
                 options: {
                     headings : {
                         payment_method_name : 'Payment Method',
@@ -301,6 +320,15 @@
             console.log(this.orderData.payments);
         },
         methods : {
+            onFileChange(event) {
+                this.orderInfo.proof_of_payment = event.target.files[0]; // Get the selected file
+                this.orderInfo.proof_of_payment_name =   this.orderInfo.proof_of_payment.name;
+            },   
+            downloadImage(row){
+                const encodedPath = encodeURIComponent(row.proof_of_payment);
+                const downloadUrl = `/order/downloadproofofpayment/${encodedPath}`;
+                window.location.href = downloadUrl;
+            },
             async toogleCancel(){
                 const result = await Swal.fire({
                     title: 'Are you sure?',
@@ -328,6 +356,8 @@
                 this.errors.payment_date = '';
                 this.errors.payment_method =  '';
                 this.errors.amount =  '';
+                this.orderInfo.proof_of_payment = []; 
+                this.orderInfo.proof_of_payment_name =  '';
                 $('#add-payment-modal').modal('show');
             },
             closeModal(){
@@ -345,7 +375,6 @@
                     });
                     return false;
                 }
-
                 this.$emit('update', this.orderInfo, this.orderDataInformation.id);
             },
             generateInvoice(){

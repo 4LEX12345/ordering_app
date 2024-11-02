@@ -265,11 +265,20 @@
         });
       },
       async update(data, id){
+        console.log(data.proof_of_payment);
         this.loading = true;
-        await axios.put('order/update/' + id, {
-          payment_date : data.payment_date,
-          payment_method : data.payment_method,
-          amount : data.amount,
+
+        const formData = new FormData();
+        formData.append('id',id);
+        formData.append('image',data.proof_of_payment);
+        formData.append('payment_date', data.payment_date);
+        formData.append('payment_method', data.payment_method);
+        formData.append('amount', data.amount);
+        formData.append('proof_of_payment_name', data.proof_of_payment_name);
+        await axios.post('order/update',  formData,{
+        headers: {
+          'Content-Type' : 'multipart/form-data',
+        }
         }).then(response => {
           $('#add-payment-modal').modal('hide');  
           toast.success(response.data.message, {
@@ -286,6 +295,7 @@
         }).catch(errors => {
           $('#add-payment-modal').modal('show');     
           this.errors = errors.response.data.errors;
+          console.log(errors);
           toast.warning('Sorry Something Went Wrong!', {
               position: toast.POSITION.TOP_RIGHT,
               autoClose: 3000,
