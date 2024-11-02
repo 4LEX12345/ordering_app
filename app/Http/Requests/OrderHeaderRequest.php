@@ -24,7 +24,7 @@ class OrderHeaderRequest extends FormRequest
         return [
             'payment_date' => 'required',
             'payment_method' => 'required',
-            'amount' => 'required|numeric',
+            'amount' => 'required|numeric|integer|min:1',
         ];
     }
 }
