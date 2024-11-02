@@ -16,6 +16,7 @@ use App\Http\Requests\OrderRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\OrderHeaderRequest;
+use App\Models\PaymentMethod;
 
 class OrderHeaderController extends Controller
 {
@@ -49,7 +50,15 @@ class OrderHeaderController extends Controller
             return $item;
         });
 
-        return response()->json(['date_today' => $date_today, 'tracking_number' => $tracking_number, 'products' => $products, 'orders' => $orders], 200);
+        $payment_methods = PaymentMethod::all();
+
+        return response()->json([
+            'date_today' => $date_today, 
+            'tracking_number' => $tracking_number, 
+            'products' => $products, 
+            'orders' => $orders,
+            'payment_methods' => $payment_methods,
+        ], 200);
     }
     public function store(OrderRequest $request){
         DB::beginTransaction();
@@ -137,6 +146,12 @@ class OrderHeaderController extends Controller
     }
     public function edit($id){
         $data = OrderHeader::with(['customer', 'orderDetails', 'payments'])->find($id);
+        $payments = PaymentHistory::where('order_header_id', $data->id)
+        ->get()
+        ->map(function($item) {
+            $item->payment_method_name = $item->paymentMethod->name;
+            return $item;
+        });
         $order_details = OrderDetail::where('order_header_id', $data->id)
         ->get()
         ->map(function($item){
@@ -144,7 +159,11 @@ class OrderHeaderController extends Controller
             $item->total= $item->quantity * $item->unit_price;
             return $item;
         });
-        return response()->json(['data' => $data, 'order_details' => $order_details], 200);
+        return response()->json([
+            'data' => $data, 
+            'order_details' => $order_details,
+            'payments' => $payments,
+        ], 200);
     }
     public function update(OrderHeaderRequest $request, $id){
 
@@ -158,6 +177,12 @@ class OrderHeaderController extends Controller
         $payment->save();   
 
         $data = OrderHeader::with(['customer', 'orderDetails', 'payments'])->find($id);
+        $payments = PaymentHistory::where('order_header_id', $data->id)
+        ->get()
+        ->map(function($item) {
+            $item->payment_method_name = $item->paymentMethod->name;
+            return $item;
+        });
         $order_details = OrderDetail::where('order_header_id', $data->id)
         ->get()
         ->map(function($item){
@@ -166,7 +191,12 @@ class OrderHeaderController extends Controller
             return $item;
         });
 
-        return response()->json(['message' => 'Payment Updated!','data' => $data, 'order_details' => $order_details ], 200);
+        return response()->json([
+            'message' => 'Payment Updated!',
+            'data' => $data, 
+            'order_details' => $order_details,
+            'payments' => $payments, 
+        ],200);
     }
     public function generateInvoice($id){
         $order = OrderHeader::findOrFail($id);
