@@ -279,7 +279,7 @@
                     payment_method : '',
                     payment : 0,
                 },
-                customerInformationForm : false,
+                customerInformationForm : true,
                 searchItem : '',
                 productList : [],
                 payment : 0,
