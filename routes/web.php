@@ -19,7 +19,12 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/order', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+  
+
+    Route::prefix('dashboard')->group(function() {
+        Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+        Route::get('fetchdata', [App\Http\Controllers\DashboardController::class, 'fetchData'])->name('fetchata');
+    });
 
     Route::get('/user', [App\Http\Controllers\UserController::class, 'index'])->name('user');
     Route::get('/user/getdata', [App\Http\Controllers\UserController::class, 'getData'])->name('getData');

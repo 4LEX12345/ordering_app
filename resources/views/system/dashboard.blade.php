@@ -2,6 +2,7 @@
 @section('content')
     <div id="app">
         <dashboard-component
+        :collection_month="{{json_encode($collection_month)}}"
         ></dashboard-component>
     </div>
 @stop
